@@ -11,6 +11,23 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+
+Route::get('/', 'PagesController@index');
+
+Route::get('/about', 'PagesController@about');
+
+Route::get('/services', 'PagesController@services');
+//php artisan route:list
+// add all methon to routes
+Route::resource('posts', 'PostController');
+
+
+
+//
+//Route::get('/users/{id}', function ($id) {
+//    return 'this is user :' . $id;
+//});
