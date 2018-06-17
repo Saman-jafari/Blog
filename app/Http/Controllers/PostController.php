@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 //use storage for delete function
@@ -46,8 +47,8 @@ class PostController extends Controller
 	    //if you need to Use query
 	    //$posts = DB::select('SELECT * FROM posts');
 
-	    //add pagination really easyly
-	    $posts = Post::orderBy('created_at','desc')->paginate(5);
+	    //add pagination really easily
+	    $posts = Post::orderBy('created_at','desc')->paginate(8);
 
 	    return view('posts.index')->with('posts', $posts);
     }
@@ -59,6 +60,9 @@ class PostController extends Controller
      */
     public function create()
     {
+	    if(auth()->user()->token !== null){
+		    return redirect('/posts')->with('error', 'Please Activate your Account');
+	    }
         return view('posts.create');
     }
 
@@ -92,7 +96,8 @@ class PostController extends Controller
 
 		    $path = $request->file('cover_image')->storeAs('public/cover_images', $fileNameToStore);
 
-		    //to create simlink do this on terminal php artisan storage:link
+		    //to create symlink do this on terminal php artisan storage:link
+		    // to create manually symlink('/home/blog/storage/app/public', '/home/storage')
 	    } else {
 	    	$fileNameToStore = 'noimage.png';
 	    }
@@ -132,7 +137,9 @@ class PostController extends Controller
     {
 
 	    $post = Post::find($id);
-
+	    if(auth()->user()->token !== null){
+		    return redirect('/posts')->with('error', 'Please Activate your Account');
+	    }
 	    //check for correct user
 	    if(auth()->user()->id !==  $post->user_id){
 	    	return redirect('/posts')->with('error', 'Unauthorized Page');
@@ -198,6 +205,10 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
+
+	    if(auth()->user()->token !== null){
+		    return redirect('/posts')->with('error', 'Please Activate your Account');
+	    }
 	    if(auth()->user()->id !==  $post->user_id){
 		    return redirect('/posts')->with('error', 'Unauthorized Page');
 	    }
