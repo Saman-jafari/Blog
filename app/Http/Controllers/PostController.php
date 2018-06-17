@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+//use App\User;
 use Illuminate\Http\Request;
 
 //use storage for delete function
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 //this brings the model here
 use App\Post;
-
+use App\Http\Resources\Posts as PostResources;
 //if you need sql query
 //use DB;
 
@@ -49,8 +49,11 @@ class PostController extends Controller
 
 	    //add pagination really easily
 	    $posts = Post::orderBy('created_at','desc')->paginate(8);
-
-	    return view('posts.index')->with('posts', $posts);
+	    if (strpos($_SERVER['REQUEST_URI'],'api')){
+	    return PostResources::collection($posts);
+	    } else {
+		    return view( 'posts.index' )->with( 'posts', $posts );
+	    }
     }
 
     /**
@@ -123,8 +126,14 @@ class PostController extends Controller
     public function show($id)
     {
         //
+
 	    $post = Post::find($id);
-	    return view('posts.show')->with('post', $post);
+	    if (strpos($_SERVER['REQUEST_URI'],'api')){
+	    	$post = Post::findOrFail($id);
+		    return new PostResources($post);
+	    } else {
+		    return view( 'posts.show' )->with( 'post', $post );
+	    }
     }
 
     /**
