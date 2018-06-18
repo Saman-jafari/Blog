@@ -50,6 +50,7 @@ class PostController extends Controller
 	    //add pagination really easily
 	    $posts = Post::orderBy('created_at','desc')->paginate(8);
 	    if (strpos($_SERVER['REQUEST_URI'],'api')){
+
 	    return PostResources::collection($posts);
 	    } else {
 		    return view( 'posts.index' )->with( 'posts', $posts );
@@ -81,7 +82,8 @@ class PostController extends Controller
         $this->validate($request, [
         	'title' => 'required',
 	        'body' => 'required',
-	        'cover_image' => 'image|required|max:1999'
+	        'cover_image' => 'image|required|max:1999',
+	        'datePublish' => 'required'
         ]);
         //handle file upload
 	    if ($request->hasFile('cover_image')){
@@ -111,6 +113,7 @@ class PostController extends Controller
 	    $post->title = $request->input('title');
 	    $post->body = $request->input('body');
 	    $post->user_id = auth()->user()->id;
+	    $post->date_publish = $request->input('datePublish');
 	    $post->cover_image = $fileNameToStore;
 	    $post->save();
 
@@ -170,8 +173,8 @@ class PostController extends Controller
 	    $this->validate($request, [
 		    'title' => 'required',
 		    'body' => 'required',
-		    'cover_image' => 'image|max:1999'
-
+		    'cover_image' => 'image|max:1999',
+		    'datePublish' => 'required'
 	    ]);
 
 	    //handle file upload
@@ -197,6 +200,7 @@ class PostController extends Controller
 	    $post = Post::find($id);
 	    $post->title = $request->input('title');
 	    $post->body = $request->input('body');
+	    $post->date_publish = $request->input('datePublish');
 	    if ($request->hasFile('cover_image')){
 	    	$post->cover_image = $fileNameToStore;
 	    }

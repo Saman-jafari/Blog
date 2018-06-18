@@ -14,6 +14,11 @@
     <div class="form-group">
         {{Form::file('cover_image')}}
     </div>
+    <div class="form-group">
+        <label for="publishDate">Publish Time</label>
+        <input id="publishDate" type="datetime-local" name="datePublish" value="{{\Carbon\Carbon::now()}}">
+
+    </div>
     {{Form::hidden('_method', 'PUT')}}
     {{Form::submit('Submit',['class' => 'btn btn-primary'] )}}
     {!! Form::close() !!}
