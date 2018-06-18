@@ -2,10 +2,13 @@
 
 @section('content')
     <div class="jumbotron">
-        <h1 class="display-4">{{$title}}</h1>
+        <div class="">
+        <img class="img-responsive d-flex m-auto" src="/images/8memesaday.jpg" alt="">
+        </div>
+        <h1 >{{$title}}</h1>
         <p class="lead">8memesaday</p>
         <hr class="my-4">
         <p>blah blah</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
     </div>
     @endsection
